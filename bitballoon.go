@@ -2,9 +2,9 @@ package bitballoon
 
 import (
 	"bytes"
-	"code.google.com/p/goauth2/oauth"
 	"encoding/json"
 	"errors"
+	"golang.org/x/oauth2"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -108,10 +108,14 @@ func NewClient(config *Config) *Client {
 	if config.HttpClient != nil {
 		client.client = config.HttpClient
 	} else if config.AccessToken != "" {
-		t := &oauth.Transport{
-			Token: &oauth.Token{AccessToken: config.AccessToken},
-		}
-		client.client = t.Client()
+		client.client = oauth2.NewClient(
+			oauth2.NoContext,
+			oauth2.StaticTokenSource(
+				&oauth2.Token{
+					AccessToken: config.AccessToken,
+				},
+			),
+		)
 	}
 
 	if &config.UserAgent != nil {
