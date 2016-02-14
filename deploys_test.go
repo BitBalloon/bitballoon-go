@@ -136,7 +136,7 @@ func TestDeploysService_Create_Zip(t *testing.T) {
 	mux.HandleFunc("/api/v1/sites/my-site/deploys", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		r.ParseForm()
-		if _,ok := r.Form["draft"]; ok {
+		if _, ok := r.Form["draft"]; ok {
 			t.Errorf("Draft should not be a query parameter for a normal deploy")
 		}
 		if r.Header["Content-Type"][0] != "application/zip" {
@@ -158,7 +158,6 @@ func TestDeploysService_Create_Zip(t *testing.T) {
 	}
 }
 
-
 func TestDeploysService_CreateDraft_Zip(t *testing.T) {
 	setup()
 	defer teardown()
@@ -166,7 +165,7 @@ func TestDeploysService_CreateDraft_Zip(t *testing.T) {
 	mux.HandleFunc("/api/v1/sites/my-site/deploys", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 		r.ParseForm()
-		if val,ok := r.Form["draft"]; ok == false || val[0] != "true" {
+		if val, ok := r.Form["draft"]; ok == false || val[0] != "true" {
 			t.Errorf("Draft should be a true parameter for a draft deploy")
 		}
 		if r.Header["Content-Type"][0] != "application/zip" {
